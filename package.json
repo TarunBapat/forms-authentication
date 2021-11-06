@@ -8,6 +8,8 @@
   ],
   "main": "src/index.js",
   "dependencies": {
+    "@firebase/app": "0.7.6",
+    "@firebase/auth": "0.19.1",
     "bootstrap": "5.1.3",
     "firebase": "9.3.0",
     "react": "17.0.2",

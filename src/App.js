@@ -1,7 +1,7 @@
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container } from "react-bootstrap";
-import SignUp from "./components/SignUp";
+import Signup from "./components/SignUp";
 
 export default function App() {
   return (
@@ -10,7 +10,7 @@ export default function App() {
       style={{ minHeight: "100vh" }}
     >
       <div className="w-100" style={{ maxWidth: "400px" }}>
-        <SignUp />
+        <Signup />
       </div>
     </Container>
   );
