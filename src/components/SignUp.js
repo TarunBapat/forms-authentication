@@ -1,22 +1,27 @@
 import { Card, Button, Form, Alert } from "react-bootstrap";
-import { useRef, useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
-const Signup = () => {
-  const [error, setError] = useState();
+import { useState, useRef } from "react";
+const SignUp = () => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [error, setError] = useState(false);
   const emailRef = useRef();
   const passwordRef = useRef();
-  const resetPasswordRef = useRef();
-  const { signUp } = useAuth();
+  const repasswordRef = useRef();
+
   const submitHandler = (e) => {
     e.preventDefault();
+    if (passwordRef.current.value !== repasswordRef.current.value) {
+      setError(true);
+    }
+
+    console.log(emailRef.current.value);
   };
   return (
     <>
       <Card>
         <Card.Body>
-          <Alert className="alert-danger text-center">{error}</Alert>
           <h1>User Registration</h1>
-          <Form>
+          {error ? <Alert>password does not match</Alert> : null}
+          <Form onSubmit={submitHandler}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control
@@ -40,23 +45,25 @@ const Signup = () => {
               <Form.Control
                 type="password"
                 placeholder="Confirm Password"
-                ref={resetPasswordRef}
+                ref={repasswordRef}
               />
             </Form.Group>
-            <Button
-              variant="primary"
-              className="w-100"
-              type="submit"
-              onClick={submitHandler}
-            >
-              Submit
+            <Button variant="primary" className="w-100" type="submit">
+              {isLogin ? "Login" : "Sign Up"}
             </Button>
           </Form>
         </Card.Body>
       </Card>
-      <div>Already a member?</div>
+      <Button
+        className="btn btn-success w-100 mt-4"
+        onClick={() => {
+          setIsLogin(!isLogin);
+        }}
+      >
+        {isLogin ? "Create New Account" : "Already a member"}
+      </Button>
     </>
   );
 };
 
-export default Signup;
+export default SignUp;
