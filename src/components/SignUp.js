@@ -2,25 +2,61 @@ import { Card, Button, Form, Alert } from "react-bootstrap";
 import { useState, useRef } from "react";
 const SignUp = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [passwordError, setPasswordError] = useState(false);
   const [error, setError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const emailRef = useRef();
   const passwordRef = useRef();
   const repasswordRef = useRef();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    if (passwordRef.current.value !== repasswordRef.current.value) {
-      setError(true);
+
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+    const repassword = repasswordRef.current.value;
+    if (password !== repassword) {
+      setPasswordError(true);
     }
 
-    console.log(emailRef.current.value);
+    if (isLogin) {
+    } else {
+      fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDwpsEdD3DTA_PI5RqMH2BHxrr9FcJ8WEE",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            returnSecureToken: true
+          }),
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      ).then((resp) => {
+        if (resp.ok) {
+          //
+        } else {
+          return resp.json().then((data) => {
+            setError(true);
+            setErrorMessage(data.error.message);
+          });
+        }
+      });
+    }
   };
   return (
     <>
       <Card>
         <Card.Body>
           <h1>User Registration</h1>
-          {error ? <Alert>password does not match</Alert> : null}
+          {passwordError ? (
+            <Alert className="alert-danger">password does not match</Alert>
+          ) : null}
+          {error ? (
+            <Alert className="alert-danger">{errorMessage}</Alert>
+          ) : null}
           <Form onSubmit={submitHandler}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
