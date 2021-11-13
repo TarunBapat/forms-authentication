@@ -1,5 +1,6 @@
 import { Card, Button, Form, Alert } from "react-bootstrap";
-import { useState, useRef } from "react";
+import { useState, useRef, useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 const SignUp = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [passwordError, setPasswordError] = useState(false);
@@ -8,6 +9,7 @@ const SignUp = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const repasswordRef = useRef();
+  const authCtx = useContext(AuthContext);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -39,6 +41,7 @@ const SignUp = () => {
     }).then(async (resp) => {
       if (resp.ok) {
         const data = await resp.json();
+        authCtx.login(data.idToken);
         console.log(data);
       } else {
         const data = await resp.json();
