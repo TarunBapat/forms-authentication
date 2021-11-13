@@ -4,7 +4,7 @@ const SignUp = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [passwordError, setPasswordError] = useState(false);
   const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("Authentication Failed");
   const emailRef = useRef();
   const passwordRef = useRef();
   const repasswordRef = useRef();
@@ -18,33 +18,34 @@ const SignUp = () => {
     if (password !== repassword) {
       setPasswordError(true);
     }
-
+    let url;
     if (isLogin) {
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDwpsEdD3DTA_PI5RqMH2BHxrr9FcJ8WEE";
     } else {
-      fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDwpsEdD3DTA_PI5RqMH2BHxrr9FcJ8WEE",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            email: email,
-            password: password,
-            returnSecureToken: true
-          }),
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      ).then((resp) => {
-        if (resp.ok) {
-          //
-        } else {
-          return resp.json().then((data) => {
-            setError(true);
-            setErrorMessage(data.error.message);
-          });
-        }
-      });
+      url =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDwpsEdD3DTA_PI5RqMH2BHxrr9FcJ8WEE";
     }
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        returnSecureToken: true
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }).then(async (resp) => {
+      if (resp.ok) {
+        const data = await resp.json();
+        console.log(data);
+      } else {
+        const data = await resp.json();
+        setError(true);
+        setErrorMessage(data.error.message);
+      }
+    });
   };
   return (
     <>
