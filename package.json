@@ -6,7 +6,7 @@
     "react",
     "starter"
   ],
-  "main": "src/index.js",
+  "main": "public/index.html",
   "dependencies": {
     "@firebase/app": "0.7.6",
     "@firebase/auth": "0.19.1",
